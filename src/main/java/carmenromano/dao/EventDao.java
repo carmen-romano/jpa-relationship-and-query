@@ -1,11 +1,16 @@
 package carmenromano.dao;
 
+import carmenromano.entities.Concerto;
 import carmenromano.entities.Event;
 import carmenromano.entities.Partecipazioni;
+import carmenromano.entities.PartitaDiCalcio;
+import carmenromano.enums.GenereType;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.PersistenceException;
+import jakarta.persistence.TypedQuery;
 
+import java.util.List;
 import java.util.UUID;
 
 public class EventDao {
@@ -14,6 +19,34 @@ public class EventDao {
     public EventDao(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
+
+    public List<PartitaDiCalcio> getPartiteVinteInCasa(String squadra) {
+        TypedQuery<PartitaDiCalcio> query = entityManager.createNamedQuery(
+                "PartitaDiCalcio.getPartiteVinteInCasa", PartitaDiCalcio.class);
+        query.setParameter("squadraVincente", squadra);
+        return query.getResultList();
+    }
+
+    public List<PartitaDiCalcio> getPartiteVinteInTrasferta(String squadra) {
+        TypedQuery<PartitaDiCalcio> query = entityManager.createNamedQuery(
+                "PartitaDiCalcio.getPartiteVinteInTrasferta", PartitaDiCalcio.class);
+        query.setParameter("squadraVincente", squadra);
+        return query.getResultList();
+    }
+    public List<Concerto> getConcertiInStreaming(boolean inStreaming) {
+        TypedQuery<Concerto> query = entityManager.createQuery("SELECT c FROM Event c WHERE c.inStreaming = :inStreaming", Concerto.class);
+        query.setParameter("inStreaming", inStreaming);
+       return  query.getResultList();
+    }
+
+    public List<Concerto> getConcertiPerGenere(GenereType genereType) {
+        TypedQuery<Concerto> query = entityManager.createQuery("SELECT e FROM Event e WHERE e.genereType = :genereType", Concerto.class);
+        query.setParameter("genereType", genereType);
+       return  query.getResultList();
+    }
+
+
+
 
     public void save(Event event) {
         EntityTransaction transazione = entityManager.getTransaction();

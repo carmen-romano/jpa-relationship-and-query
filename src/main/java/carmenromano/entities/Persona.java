@@ -11,6 +11,7 @@ import java.util.UUID;
 @Table(name = "persona") //nome tabella
 public class Persona {
 
+
     @Id
     @GeneratedValue
     private UUID id;

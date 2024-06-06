@@ -9,36 +9,37 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "eventi")
-public class Event {
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+public abstract class Event {
 
     @Id
     @GeneratedValue
     private UUID id;
 
     @Column(name = "titolo")
-    private String titolo;
+    protected String titolo;
 
     @Column(name = "data_evento")
-    private LocalDate dataEvento;
+    protected LocalDate dataEvento;
 
     @Column(name = "descrizione")
-    private String descrizione;
+    protected String descrizione;
 
     @Column(name = "tipo_evento")
     @Enumerated(EnumType.STRING)
-    private EventType eventType;
+    protected EventType eventType;
 
     @Column(name = "numero_max_partecipanti")
-    private Integer numeroMaxPartecipanti;
+    protected Integer numeroMaxPartecipanti;
 
     @ManyToOne
     @JoinColumn(name = "location_id")
-    private Location location;
+    protected Location location;
 
     @OneToMany(
             mappedBy = "event"
     )
-    private List<Partecipazioni> partecipazioniList;
+    protected List<Partecipazioni> partecipazioniList;
 
     public Event() {}
 
